@@ -10,15 +10,16 @@ master
 home
 
 ## 安装及使用
-```bush
-clone 克隆下来
-npm install 安装依赖
-npm run dev 编译生成
-npm run start 启动后端服务器
-url：http://localhost:8080  根据后端服务器的baseUrl访问网址，显示出app则表示正常
 ```
-### 管理后台地址
-```bush
+fork or clone or download - fork 或 克隆 或下载
+npm install - 安装依赖
+npm run dev - 编译生成
+npm run start - 启动后端服务器
+url：http://localhost:8080 - 根据后端服务器的baseUrl访问网址，显示出app则表示正常
+```
+### 当前模板
+```
+管理后台
 http://localhost:8080/admin/login 登录页面
 http://localhost:8080/admin/home  管理首页
 ```

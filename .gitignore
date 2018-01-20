@@ -1,6 +1,7 @@
 .vscode/
 *.map
 .idea/
+node_modules
 #backend/js/*.js    
 #/static/js
 #/backend/js
