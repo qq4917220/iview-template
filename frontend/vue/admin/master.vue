@@ -17,7 +17,7 @@
           <Submenu name="1">
             <template slot="title">
               <Icon type="ios-paper"></Icon>
-              内容管理
+              <span>内容管理</span>
             </template>
             <MenuItem name="1-1">文章管理</MenuItem>
             <MenuItem name="1-2">评论管理</MenuItem>
@@ -78,6 +78,8 @@
         </Header>
         <Content style="height:100%;margin:20px;">
           <router-view></router-view>
+          <div v-html="loggerInfo">
+          </div>
         </Content>
       </Layout>
     </Layout>
@@ -85,81 +87,18 @@
 </template>
 
 <style scoped>
-.layout {
-  border: 1px solid #d7dde4;
-  background: #f5f7f9;
-  position: relative;
-  border-radius: 4px;
-  overflow: hidden;
-}
-.layout-header-bar {
-  background: #fff;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
-}
-.layout-logo-left {
-  width: 90%;
-  height: 30px;
-  background: #5b6270;
-  border-radius: 3px;
-  margin: 15px auto;
-}
-.menu-icon {
-  transition: all 0.3s;
-}
-.rotate-icon {
-  transform: rotate(90deg);
-}
-.menu-item span {
-  display: inline-block;
-  overflow: hidden;
-  width: 69px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  vertical-align: bottom;
-  transition: width 0.2s ease 0.2s;
-}
-.menu-item i {
-  transform: translateX(0px);
-  transition: font-size 0.2s ease, transform 0.2s ease;
-  vertical-align: middle;
-  font-size: 16px;
-}
-.collapsed-menu span {
-  width: 0px;
-  transition: width 0.2s ease;
-}
-.collapsed-menu i {
-  transform: translateX(5px);
-  transition: font-size 0.2s ease 0.2s, transform 0.2s ease 0.2s;
-  vertical-align: middle;
-  font-size: 22px;
-}
-
-/*后添加*/
-.logo-con {
-  padding: 8px;
-  text-align: center;
-}
-.logo-con img {
-  height: 44px;
-  width: auto;
-}
-.header-navicon {
-  cursor: pointer;
-  display: inline-block;
-}
-.header-avator {
-  display: inline-block;
-  position: absolute;
-  right: 10px;
-}
+@import url("./master.css");
 </style>
 
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
+import logger from "weex-logger";
+import session from "weex-session";
 
 @Component
 export default class App extends Vue {
+  isDebug = true;
+  loggerInfo = "";
   isCollapsed = false;
   menuitemClasses = ["menu-item", ""];
   rotateIcon = ["menu-item", ""];
@@ -174,8 +113,17 @@ export default class App extends Vue {
       "menu-icon",
       this.isCollapsed == true ? "rotate-icon" : ""
     ];
-    console.log(this.menuitemClasses);
-    console.log(this.rotateIcon);
+    logger.add(this.menuitemClasses, true);
+    logger.add(this.rotateIcon, true);
+  }
+
+  created() {
+    if (this.isDebug) {
+      logger.start(content => {
+        this.loggerInfo = content;
+      });
+    }
+    logger.add("-----------logger begin------------");
   }
 
   mounted() {}
