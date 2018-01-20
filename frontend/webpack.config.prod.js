@@ -13,11 +13,6 @@ module.exports = merge(webpackBaseConfig, {
             name: 'vendor',
             chunks: ['app'],
             minChunks: Infinity
-          }),
-        new webpack.optimize.CommonsChunkPlugin({
-            name: 'vendorm',
-            chunks: ['appm'],
-            minChunks: Infinity
         }),
         new webpack.optimize.UglifyJsPlugin({
             sourceMap: false,

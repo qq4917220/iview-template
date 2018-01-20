@@ -14,11 +14,6 @@ module.exports = merge(webpackBaseConfig, {
             chunks: ['app'],
             minChunks: Infinity
         }),
-        new webpack.optimize.CommonsChunkPlugin({
-            name: 'vendorm',
-            chunks: ['appm'],
-            minChunks: Infinity
-        }),
         new webpack.optimize.UglifyJsPlugin({
             sourceMap: false,
             compress: {
