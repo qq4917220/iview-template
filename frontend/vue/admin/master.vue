@@ -1,53 +1,32 @@
 <template>
   <!-- <router-view></router-view> -->
-  <div class="app-main">
-    <Layout class="app-layout">
+  <div class="app-main" style="position:absolute;width:100%;height:100%;">
+    <Layout class="app-layout" style="height:100%;">
       <Sider ref="side1" hide-trigger collapsible :collapsed-width="78" v-model="isCollapsed" style="overflow:auto">
         <!--logo-->
         <div class="logo-con">
-          <img v-show="!isCollapsed" src="/static/admin/images/logo.jpg" key="max-logo" />
-          <img v-show="isCollapsed" src="/static/admin/images/logo-min.jpg" key="min-logo" />
+          <img v-show="!isCollapsed" src="/static/admin/images/logo.jpg" key="max-logo" @click="handleClickHome" />
+          <img v-show="isCollapsed" src="/static/admin/images/logo-min.jpg" key="min-logo" @click="handleClickHome" />
         </div>
         <!--菜单-->
-        <Menu active-name="1-2" theme="dark" width="auto" :class="menuitemClasses">
-          <MenuItem name="1-1">
+        <Menu theme="dark" width="auto" :class="menuitemClasses" @on-select="handleClickMenuItem">
+          <MenuItem name="1">
           <Icon type="ios-navigate"></Icon>
-          <span>Option 1</span>
+          <span>广告管理</span>
           </MenuItem>
-          <Submenu name="1">
+          <MenuItem name="2">
+          <Icon type="ios-navigate"></Icon>
+          <span>推广功能</span>
+          </MenuItem>
+          <Submenu name="3">
             <template slot="title">
               <Icon type="ios-paper"></Icon>
-              <span>内容管理</span>
+              <span>数据查询</span>
             </template>
-            <MenuItem name="1-1">文章管理</MenuItem>
-            <MenuItem name="1-2">评论管理</MenuItem>
-            <MenuItem name="1-3">举报管理</MenuItem>
+            <MenuItem name="3-1">文章查询</MenuItem>
+            <MenuItem name="3-2">评论查询</MenuItem>
+            <MenuItem name="3-3">举报查询</MenuItem>
           </Submenu>
-          <MenuItem name="1-2">
-          <Icon type="search"></Icon>
-          <span>Option 2</span>
-          </MenuItem>
-          <MenuItem name="1-3">
-          <Icon type="settings"></Icon>
-          <span>Option 3</span>
-          </MenuItem>
-          <MenuItem name="1-3">
-          <Icon type="settings"></Icon>
-          <span>Option 3</span>
-          </MenuItem>
-          <MenuItem name="1-3">
-          <Icon type="settings"></Icon>
-          <span>Option 3</span>
-          </MenuItem>
-          <MenuItem name="1-3">
-          <Icon type="settings"></Icon>
-          <span>Option 3</span>
-          </MenuItem>
-          <MenuItem name="1-3">
-          <Icon type="settings"></Icon>
-          <span>Option 3</span>
-          </MenuItem>
-
         </Menu>
       </Sider>
       <Layout>
@@ -68,6 +47,7 @@
                   <DropdownMenu slot="list">
                     <DropdownItem name="userCenter" divided>个人中心</DropdownItem>
                     <DropdownItem name="userPower" divided>权限设置</DropdownItem>
+                    <DropdownItem name="gotoHome" divided>返回首页</DropdownItem>
                     <DropdownItem name="loginOut" divided>退出登录</DropdownItem>
                   </DropdownMenu>
                 </Dropdown>
@@ -105,6 +85,7 @@ export default class App extends Vue {
 
   @Watch("isCollapsed")
   isCollapsedFun() {
+    logger.add("切换" + this.isCollapsed);
     this.menuitemClasses = [
       "menu-item",
       this.isCollapsed == true ? "collapsed-menu" : ""
@@ -113,8 +94,6 @@ export default class App extends Vue {
       "menu-icon",
       this.isCollapsed == true ? "rotate-icon" : ""
     ];
-    logger.add(this.menuitemClasses, true);
-    logger.add(this.rotateIcon, true);
   }
 
   created() {
@@ -128,9 +107,49 @@ export default class App extends Vue {
 
   mounted() {}
 
+  //功能建设中
+  building(str) {
+    this.$Message.error({ content: str + "功能建设中" });
+  }
+
+  //返回首页
+  handleClickHome() {
+    const url = baseUrl + "/admin/home/";
+    location.href = url;
+  }
+
+  //切换左侧
   collapsedSider() {
     let obj: any = this;
     obj.$refs.side1.toggleCollapse();
+  }
+
+  //用户下拉菜单点击
+  handleClickUserDropdown(name) {
+    logger.add("用户下拉菜单：" + name);
+    switch (name) {
+      case "gotoHome":
+        this.handleClickHome();
+        break;
+      case "loginOut":
+        session.reset();
+        const url = baseUrl + "/admin/login/";
+        location.href = url;
+        break;
+      default:
+        this.building(name);
+        break;
+    }
+  }
+
+  //用户左侧菜单点击
+  handleClickMenuItem(name) {
+    logger.add("用户左侧菜单：" + name);
+    switch (name) {
+      default:
+        this.building(name);
+        break;
+    }
   }
 }
 </script>
