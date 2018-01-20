@@ -53,7 +53,26 @@
       <Layout>
         <Header :style="{padding: 0}" class="layout-header-bar">
           <!--左侧缩进按钮-->
-          <Icon @click.native="collapsedSider" :class="rotateIcon" :style="{margin: '20px 20px 0'}" type="navicon-round" size="24"></Icon>
+          <div class="navicon-con">
+            <Icon @click.native="collapsedSider" :class="rotateIcon" :style="{margin: '20px 20px 0'}" type="navicon-round" size="24"></Icon>
+          </div>
+          <!--右侧登录-->
+          <div class="header-avator-con">
+            <div class="user-dropdown-menu-con">
+              <Row type="flex" justify="end" align="middle" class="user-dropdown-innercon">
+                <Dropdown transfer trigger="click" @on-click="handleClickUserDropdown">
+                  <a href="javascript:void(0)">
+                    <span class="main-user-name">{{ userName }}</span>
+                    <Icon type="arrow-down-b"></Icon>
+                  </a>
+                  <DropdownMenu slot="list">
+                    <DropdownItem name="loginout" divided>退出登录</DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
+                <Avatar icon="person" style="background: #619fe7;margin-left:10px;"></Avatar>
+              </Row>
+            </div>
+          </div>
         </Header>
         <Content style="height:100%;margin:20px;">
           <router-view></router-view>

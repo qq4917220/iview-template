@@ -4,7 +4,7 @@
 
 ## 安装及使用
 ```
-fork or clone or download - fork 或 克隆 或下载
+fork or clone or download - fork或克隆或下载
 npm install - 安装依赖
 npm run dev - 编译生成
 npm run start - 启动后端服务器
