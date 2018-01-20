@@ -1,13 +1,6 @@
-﻿A set of VUE+IVIEW based templates.
-一套基于VUE+IVIEW的模板。
+﻿A set of VUE+IVIEW based templates. Focus on the outside of the template framework to facilitate the initialization of the programmer interface.
 
-# iView template
-专注于模板外框架，方便程序员初始化界面。
-
---管理员模板
-login
-master
-home
+一套基于VUE+IVIEW的模板。专注于模板外框，方便程序员初始化界面。
 
 ## 安装及使用
 ```
