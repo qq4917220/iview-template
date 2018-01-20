@@ -108,7 +108,7 @@ export default class App extends Vue {
   mounted() {}
 
   //功能建设中
-  building(str) {
+  building(str: any) {
     this.$Message.error({ content: str + "功能建设中" });
   }
 
@@ -125,7 +125,7 @@ export default class App extends Vue {
   }
 
   //用户下拉菜单点击
-  handleClickUserDropdown(name) {
+  handleClickUserDropdown(name: any) {
     logger.add("用户下拉菜单：" + name);
     switch (name) {
       case "gotoHome":
@@ -143,7 +143,7 @@ export default class App extends Vue {
   }
 
   //用户左侧菜单点击
-  handleClickMenuItem(name) {
+  handleClickMenuItem(name: any) {
     logger.add("用户左侧菜单：" + name);
     switch (name) {
       default:
