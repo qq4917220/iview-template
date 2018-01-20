@@ -1,6 +1,6 @@
 {
   "name": "iview-template",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "a template bases on iview",
   "main": "backend/ts/app.ts",
   "scripts": {
