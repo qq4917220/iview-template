@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "isolatedModules": false,
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "strictNullChecks": true,
+        "removeComments": true,
+        "suppressImplicitAnyIndexErrors": true,
+        "allowSyntheticDefaultImports": true,
+        "allowJs": true,
+        "outDir": "js",
+        "watch": true
+    },
+    "include": [
+        "../types/**/*",
+        "./types/**/*",
+        "./ts/**/*"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}
