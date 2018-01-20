@@ -1,4 +1,4 @@
-.vscode/
+#.vscode/
 *.map
 .idea/
 node_modules
