@@ -63,8 +63,8 @@
   </div>
 </template>
 
-<style scoped>
-@import url("./master.css");
+<style scoped src="./master.css">
+
 </style>
 
 <script lang="ts">
