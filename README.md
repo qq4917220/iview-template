@@ -23,5 +23,6 @@ http://localhost:8080/admin/home  管理首页
 ## thanks
 If you find this project helpful, maybe you can buy me a coffee. 
 
+weixin 微信
 ![image](https://github.com/qq4917220/iview-template/blob/master/static/pic/weixin.jpg)
 
