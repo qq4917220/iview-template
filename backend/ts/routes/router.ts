@@ -11,6 +11,6 @@ import * as admin from '../controllers/admin'
  * @param app 
  */
 export function set(app: express.Express) {
-    app.use('/admin', admin),
-        app.use('/', main)
+    app.use('/admin', admin)
+    app.use('/', main)
 }
