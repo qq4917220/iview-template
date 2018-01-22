@@ -15,6 +15,7 @@ url：http://localhost:8080 - 根据后端服务器的baseUrl访问网址，显�
 管理后台
 http://localhost:8080/admin/login 登录页面
 http://localhost:8080/admin/home  管理首页
+http://localhost:8080/admin/iframe  兼容以前的程序，使用IFRAME进行嵌套
 ```
 
 ## License
