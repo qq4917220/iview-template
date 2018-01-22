@@ -27,6 +27,16 @@
             <MenuItem name="3-2">评论查询</MenuItem>
             <MenuItem name="3-3">举报查询</MenuItem>
           </Submenu>
+          <Submenu name="4">
+            <template slot="title">
+              <Icon type="ios-paper"></Icon>
+              <span>IFRAME</span>
+            </template>
+            <MenuItem name="iSina">SINA</MenuItem>
+            <MenuItem name="iSohu">SOHU</MenuItem>
+            <MenuItem name="iBaidu">BAIDU</MenuItem>
+            <MenuItem name="iOther">OTHER</MenuItem>
+          </Submenu>
         </Menu>
       </Sider>
       <Layout>
@@ -114,8 +124,9 @@ export default class App extends Vue {
 
   //返回首页
   handleClickHome() {
-    const url = baseUrl + "/admin/home/";
-    location.href = url;
+    this.$router.push({
+      name: "adminHome"
+    });
   }
 
   //切换左侧
@@ -143,9 +154,20 @@ export default class App extends Vue {
   }
 
   //用户左侧菜单点击
-  handleClickMenuItem(name: any) {
-    logger.add("用户左侧菜单：" + name);
+  handleClickMenuItem(name: string) {
+    // logger.add("用户左侧菜单：" + name);
     switch (name) {
+      case "iSina":
+      case "iSohu":
+      case "iBaidu":
+      case "iOther":
+        // logger.add("i：" + name);
+        session.set<string>("adminIframe", name);
+        this.$router.push({
+          name: "adminIframe",
+          params: { id: name }
+        });
+        break;
       default:
         this.building(name);
         break;
