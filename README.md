@@ -24,6 +24,10 @@ http://localhost:8080/admin/iframe  兼容以前的程序，使用IFRAME进行�
 ## thanks
 If you find this project helpful, maybe you can buy me a coffee. 
 
-weixin 微信
+支付宝(alipay):
+wish03@163.com
+
+微信号(weixin):
+qq4917220
 ![image](https://github.com/qq4917220/iview-template/blob/master/static/pic/weixin.jpg)
 
