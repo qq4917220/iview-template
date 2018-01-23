@@ -5,11 +5,11 @@
       <Sider ref="side1" hide-trigger collapsible :collapsed-width="78" v-model="isCollapsed" style="overflow:auto">
         <!--logo-->
         <div class="logo-con">
-          <img v-show="!isCollapsed" src="/static/admin/images/logo.jpg" key="max-logo" @click="handleClickHome" />
-          <img v-show="isCollapsed" src="/static/admin/images/logo-min.jpg" key="min-logo" @click="handleClickHome" />
+          <img v-show="!isCollapsed" src="/admin/images/logo.jpg" key="max-logo" @click="handleClickHome" />
+          <img v-show="isCollapsed" src="/admin/images/logo-min.jpg" key="min-logo" @click="handleClickHome" />
         </div>
         <!--菜单-->
-        <Menu theme="dark" width="auto" :class="menuitemClasses" @on-select="handleClickMenuItem">
+        <Menu theme="dark" width="auto" accordion :active-name="menuitemActiveName" :class="menuitemClasses" @on-select="handleClickMenuItem">
           <MenuItem name="1">
           <Icon type="ios-navigate"></Icon>
           <span>广告管理</span>
@@ -51,14 +51,14 @@
               <Row type="flex" justify="end" align="middle" class="user-dropdown-innercon">
                 <Dropdown transfer trigger="click" @on-click="handleClickUserDropdown">
                   <a href="javascript:void(0)">
-                    <span class="main-user-name">userName</span>
+                    <span class="main-user-name">{{masterUserName}}</span>
                     <Icon type="arrow-down-b"></Icon>
                   </a>
                   <DropdownMenu slot="list">
                     <DropdownItem name="userCenter" divided>个人中心</DropdownItem>
                     <DropdownItem name="userPower" divided>权限设置</DropdownItem>
                     <DropdownItem name="gotoHome" divided>返回首页</DropdownItem>
-                    <DropdownItem name="loginOut" divided>退出登录</DropdownItem>
+                    <DropdownItem name="logout" divided>退出登录</DropdownItem>
                   </DropdownMenu>
                 </Dropdown>
                 <Avatar icon="person" style="background: #619fe7;margin-left:10px;"></Avatar>
@@ -82,20 +82,19 @@
 
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
-import logger from "weex-logger";
-import session from "weex-session";
 
 @Component
 export default class App extends Vue {
+  masterUserName = "";
   isDebug = true;
   loggerInfo = "";
   isCollapsed = false;
   menuitemClasses = ["menu-item", ""];
+  menuitemActiveName = "";
   rotateIcon = ["menu-item", ""];
 
   @Watch("isCollapsed")
   isCollapsedFun() {
-    logger.add("切换" + this.isCollapsed);
     this.menuitemClasses = [
       "menu-item",
       this.isCollapsed == true ? "collapsed-menu" : ""
@@ -107,12 +106,7 @@ export default class App extends Vue {
   }
 
   created() {
-    if (this.isDebug) {
-      logger.start(content => {
-        this.loggerInfo = content;
-      });
-    }
-    logger.add("-----------logger begin------------");
+    this.masterUserName = loginUser.name;
   }
 
   mounted() {}
@@ -124,6 +118,7 @@ export default class App extends Vue {
 
   //返回首页
   handleClickHome() {
+    this.menuitemActiveName = "";
     this.$router.push({
       name: "adminHome"
     });
@@ -137,14 +132,12 @@ export default class App extends Vue {
 
   //用户下拉菜单点击
   handleClickUserDropdown(name: any) {
-    logger.add("用户下拉菜单：" + name);
     switch (name) {
       case "gotoHome":
         this.handleClickHome();
         break;
-      case "loginOut":
-        session.reset();
-        const url = baseUrl + "/admin/login/";
+      case "logout":
+        const url = baseUrl + "/admin/logout";
         location.href = url;
         break;
       default:
@@ -155,14 +148,14 @@ export default class App extends Vue {
 
   //用户左侧菜单点击
   handleClickMenuItem(name: string) {
+    this.menuitemActiveName = name;
+    console.log("this.menuitemActiveName" + this.menuitemActiveName);
     // logger.add("用户左侧菜单：" + name);
     switch (name) {
       case "iSina":
       case "iSohu":
       case "iBaidu":
       case "iOther":
-        // logger.add("i：" + name);
-        session.set<string>("adminIframe", name);
         this.$router.push({
           name: "adminIframe",
           params: { id: name }
