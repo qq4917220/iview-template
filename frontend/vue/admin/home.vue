@@ -18,7 +18,7 @@ import session from "weex-session";
 })
 export default class test extends Vue {
   mounted() {
-    console.log("home");
+    // console.log("home");
   }
 }
 </script>

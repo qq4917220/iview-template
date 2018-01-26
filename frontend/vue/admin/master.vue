@@ -10,33 +10,22 @@
         </div>
         <!--菜单-->
         <Menu theme="dark" width="auto" accordion :active-name="menuitemActiveName" :class="menuitemClasses" @on-select="handleClickMenuItem">
-          <MenuItem name="1">
-          <Icon type="ios-navigate"></Icon>
-          <span>广告管理</span>
-          </MenuItem>
-          <MenuItem name="2">
-          <Icon type="ios-navigate"></Icon>
-          <span>推广功能</span>
-          </MenuItem>
-          <Submenu name="3">
-            <template slot="title">
-              <Icon type="ios-paper"></Icon>
-              <span>数据查询</span>
-            </template>
-            <MenuItem name="3-1">文章查询</MenuItem>
-            <MenuItem name="3-2">评论查询</MenuItem>
-            <MenuItem name="3-3">举报查询</MenuItem>
-          </Submenu>
-          <Submenu name="4">
-            <template slot="title">
-              <Icon type="ios-paper"></Icon>
-              <span>IFRAME</span>
-            </template>
-            <MenuItem name="iSina">SINA</MenuItem>
-            <MenuItem name="iSohu">SOHU</MenuItem>
-            <MenuItem name="iBaidu">BAIDU</MenuItem>
-            <MenuItem name="iOther">OTHER</MenuItem>
-          </Submenu>
+          <div v-for="(item, index) in menuMenuItems" :key="index">
+            <!--单链接-->
+            <MenuItem :name="item.id" v-if="!item.children">
+            <Icon :type="item.icon?item.icon:'ios-navigate'"></Icon>
+            <span>{{item.title}}</span>
+            </MenuItem>
+            <!--带子菜单-->
+            <Submenu name="3" v-if="item.children">
+              <template slot="title">
+                <Icon :type=" item.icon?item.icon: 'folder' "></Icon>
+                <span>{{item.title}}</span>
+              </template>
+              <MenuItem :name="item2.id" v-for="(item2, index2) in item.children" :key="index2">
+              <Icon :type="item2.icon?item2.icon:'ios-navigate'"></Icon>{{item2.title}}</MenuItem>
+            </Submenu>
+          </div>
         </Menu>
       </Sider>
       <Layout>
@@ -82,6 +71,7 @@
 
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
+import Axios, { AxiosRequestConfig } from "axios";
 
 @Component
 export default class App extends Vue {
@@ -92,6 +82,7 @@ export default class App extends Vue {
   menuitemClasses = ["menu-item", ""];
   menuitemActiveName = "";
   rotateIcon = ["menu-item", ""];
+  menuMenuItems: menuModel.menuListItem[] = [];
 
   @Watch("isCollapsed")
   isCollapsedFun() {
@@ -105,11 +96,29 @@ export default class App extends Vue {
     ];
   }
 
-  created() {
+  mounted() {
     this.masterUserName = loginUser.name;
+    this.initMenu();
   }
 
-  mounted() {}
+  //初始化菜单
+  async initMenu() {
+    let reqConfig: AxiosRequestConfig = {
+      method: "post",
+      url: baseUrl + "/admin/menu",
+      data: {},
+      headers: {
+        "Content-Type": "application/json"
+      }
+    };
+    let menuData = await Axios.request(reqConfig);
+    let data: menuModel.menuResult<menuModel.menuListItem> = menuData.data;
+
+    if (data.err) {
+      return;
+    }
+    this.menuMenuItems = data.data!.items;
+  }
 
   //功能建设中
   building(str: any) {
@@ -149,22 +158,11 @@ export default class App extends Vue {
   //用户左侧菜单点击
   handleClickMenuItem(name: string) {
     this.menuitemActiveName = name;
-    console.log("this.menuitemActiveName" + this.menuitemActiveName);
     // logger.add("用户左侧菜单：" + name);
-    switch (name) {
-      case "iSina":
-      case "iSohu":
-      case "iBaidu":
-      case "iOther":
-        this.$router.push({
-          name: "adminIframe",
-          params: { id: name }
-        });
-        break;
-      default:
-        this.building(name);
-        break;
-    }
+    this.$router.push({
+      name: "adminIframe",
+      params: { id: name }
+    });
   }
 }
 </script>

@@ -6,13 +6,8 @@
 
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
-// import Axios, { AxiosResponse, AxiosError } from "axios";
-import VueRouter from "vue-router";
-// import moment from "moment";
-// import _ from "lodash";
-
-import session from "weex-session";
-import logger from "weex-logger";
+import Axios, { AxiosRequestConfig } from "axios";
+import _ from "lodash";
 
 @Component({
   components: {}
@@ -29,20 +24,39 @@ export default class Iframe extends Vue {
   mounted() {
     this.iframeChange(this.$route.params.id);
   }
-  iframeChange(id: string) {
-    switch (id) {
-      case "iSina":
-        this.iframeUrl = "//www.sina.com.cn";
-        break;
-      case "iSohu":
-        this.iframeUrl = "//www.sohu.com";
-        break;
-      case "iBaidu":
-        this.iframeUrl = "//www.baidu.com";
-        break;
-      default:
-        this.iframeUrl = "";
-        break;
+  async iframeChange(id: string) {
+    let reqConfig: AxiosRequestConfig = {
+      method: "post",
+      url: baseUrl + "/admin/menu",
+      data: {},
+      headers: {
+        "Content-Type": "application/json"
+      }
+    };
+    let menuData = await Axios.request(reqConfig);
+    let data: menuModel.menuResult<menuModel.menuListItem> = menuData.data;
+    if (data.err) {
+      return;
+    }
+    let url = "";
+
+    _.each(data.data!.items, item => {
+      if (!item.children) {
+        if (item.id == Number(id)) {
+          url = item.url;
+        }
+      } else {
+        _.each(item.children, item2 => {
+          if (item2.id == Number(id)) {
+            url = item2.url;
+          }
+        });
+      }
+    });
+    if (url.indexOf("http") == -1) {
+      this.iframeUrl = baseUrl + "/" + url;
+    } else {
+      this.iframeUrl = url;
     }
   }
 }

@@ -1,10 +1,8 @@
 <template>
-    <div>
-        <div>app</div>
-        <MasterHeader></MasterHeader>
-        <router-view></router-view>
-        <MasterFooter></MasterFooter>
-    </div>
+  <div>
+    <div>app</div>
+    <router-view></router-view>
+  </div>
 </template>
 
 <style>
