@@ -1,6 +1,6 @@
-﻿A set of VUE+IVIEW based templates. Focus on the outside of the template framework to facilitate the initialization of the programmer interface.
+﻿A set of VUE+IVIEW based templates. Focus on the outside of the template framework to facilitate the initialization of the programmer interface.You are welcome to add the template you have made. If it feels good, please give me a star.
 
-一套基于VUE+IVIEW的模板。专注于模板外框，方便程序员初始化界面。
+一套基于VUE+IVIEW的模板。专注于模板外框，方便程序员初始化界面。欢迎您把您做好的模板也加进来。如果觉得好，请给我加星哦。
 
 ## 安装及使用
 ```

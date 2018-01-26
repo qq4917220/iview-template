@@ -72,6 +72,7 @@
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
 import Axios, { AxiosRequestConfig } from "axios";
+import _ from "lodash";
 
 @Component
 export default class App extends Vue {
@@ -156,12 +157,34 @@ export default class App extends Vue {
   }
 
   //用户左侧菜单点击
-  handleClickMenuItem(name: string) {
+  handleClickMenuItem(id: string) {
     this.menuitemActiveName = name;
-    // logger.add("用户左侧菜单：" + name);
+    // logger.add("用户左侧菜单：" + id);
+    let url = "";
+    _.each(this.menuMenuItems, (item: menuModel.menuListItem) => {
+      if (!item.children) {
+        if (item.id == Number(id)) {
+          url = item.url;
+        }
+      } else {
+        _.each(item.children, (item2: menuModel.menuListItem) => {
+          if (item2.id == Number(id)) {
+            url = item2.url;
+          }
+        });
+      }
+    });
+
+    let iUrl = "";
+    let iName = "adminIframe";
+    if (url.indexOf("http://") > -1 || url.indexOf("https://") > -1) {
+      iUrl = url;
+    } else {
+      iUrl = baseUrl + "/" + url;
+    }
     this.$router.push({
-      name: "adminIframe",
-      params: { id: name }
+      name: iName,
+      params: { url: iUrl }
     });
   }
 }

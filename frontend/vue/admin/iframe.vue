@@ -6,62 +6,23 @@
 
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
-import Axios, { AxiosRequestConfig } from "axios";
-import _ from "lodash";
 
 @Component({
   components: {}
 })
 export default class Iframe extends Vue {
-  iframeId = "";
-  iframeName = "";
   iframeUrl = "";
 
   @Watch("$route")
   routeFun() {
-    this.iframeChange(this.$route.params.id);
+    this.iframeChange(this.$route.params.url);
   }
   mounted() {
-    this.iframeChange(this.$route.params.id);
+    this.iframeChange(this.$route.params.url);
   }
-  async iframeChange(id: string) {
-    let reqConfig: AxiosRequestConfig = {
-      method: "post",
-      url: baseUrl + "/admin/menu",
-      data: {},
-      headers: {
-        "Content-Type": "application/json"
-      }
-    };
-    let menuData = await Axios.request(reqConfig);
-    let data: menuModel.menuResult<menuModel.menuListItem> = menuData.data;
-    if (data.err) {
-      return;
-    }
-    let url = "";
-
-    _.each(data.data!.items, item => {
-      if (!item.children) {
-        if (item.id == Number(id)) {
-          url = item.url;
-        }
-      } else {
-        _.each(item.children, item2 => {
-          if (item2.id == Number(id)) {
-            url = item2.url;
-          }
-        });
-      }
-    });
-    if (url.indexOf("http") == -1) {
-      this.iframeUrl = baseUrl + "/" + url;
-    } else {
-      this.iframeUrl = url;
-    }
+  iframeChange(url: string) {
+    let iUrl = decodeURI(url);
+    this.iframeUrl = iUrl;
   }
 }
 </script>
-
-
-
-

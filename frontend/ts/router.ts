@@ -8,7 +8,7 @@ Vue.use(VueRouter)
 
 const routes = <RouteConfig[]>[
     { path: '/admin/home', name: 'adminHome', component: adminHome },
-    { path: '/admin/iframe/:id', name: 'adminIframe', component: adminIframe }
+    { path: '/admin/iframe/:url', name: 'adminIframe', component: adminIframe }
 ]
 
 const Router = new VueRouter({
