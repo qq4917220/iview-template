@@ -1,6 +1,6 @@
 {
   "name": "iview-template",
-  "version": "1.0.21",
+  "version": "1.0.22",
   "description": "A set of VUE+IVIEW based templates. Focus on the outside of the template framework to facilitate the initialization of the programmer interface.You are welcome to add the template you have made. If it feels good, please give me a star.",
   "main": "backend/ts/app.ts",
   "scripts": {

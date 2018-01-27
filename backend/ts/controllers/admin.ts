@@ -53,13 +53,13 @@ router.use('/menu', (req, res) => {
 						"id": 1001,
 						"icon": "",
 						"title": "Page1 ",
-						"url": "page1",
+						"url": "/test/page1",
 						"status": true
 					}, {
 						"id": 1002,
 						"icon": "search",
 						"title": "search",
-						"url": "search",
+						"url": "/test/search?searchText=1234",
 						"status": true
 					}]
 				}, {
@@ -85,7 +85,7 @@ router.use('/menu', (req, res) => {
 					"id": 3000,
 					"icon": "",
 					"title": "OnePage",
-					"url": "home",
+					"url": "/admin/home",
 					"status": true
 				}]
 			}

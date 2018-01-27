@@ -174,18 +174,16 @@ export default class App extends Vue {
         });
       }
     });
-
-    let iUrl = "";
-    let iName = "adminIframe";
+    console.log(url);
     if (url.indexOf("http://") > -1 || url.indexOf("https://") > -1) {
-      iUrl = url;
+      this.$router.push({
+        name: "adminIframe",
+        params: { url: encodeURIComponent(url) }
+      });
     } else {
-      iUrl = baseUrl + "/" + url;
+      let iUrl = baseUrl + "/" + encodeURIComponent(url);
+      this.$router.push(url);
     }
-    this.$router.push({
-      name: iName,
-      params: { url: iUrl }
-    });
   }
 }
 </script>

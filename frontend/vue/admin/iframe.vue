@@ -21,7 +21,7 @@ export default class Iframe extends Vue {
     this.iframeChange(this.$route.params.url);
   }
   iframeChange(url: string) {
-    let iUrl = decodeURI(url);
+    let iUrl = decodeURIComponent(url);
     this.iframeUrl = iUrl;
   }
 }
