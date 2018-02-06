@@ -3,10 +3,16 @@
 2. why should a heavy instead of iview-admin, because I used typescript, so this is the use of typescript rewriting. So this is for a programmer who uses typescript.
 3. this is mainly made of a template and supports iframe, so that it can be used when compatible with old old programs.
 
+```
 一套基于VUE+IVIEW的模板。专注于模板外框，方便程序员初始化界面。欢迎您把您做好的模板也加进来。如果觉得好，请给我加星哦。
+
 1.这是直接重写的iview-admin的模板，并且借鉴了其中大量的代码。感谢他们做出了这么好的代码，致敬！
+
 2.为什么要重写而不直接用iview-admin呢，因为我用的是typescript，所以这套是用typescript重写的。所以这套是给公司是使用typescript的程序员用的。
+
 3.这个主要是做了一个模板，并且支持iframe，这样在兼容以前的老程序时可以用上。
+
+```
 
 ## 安装及使用
 ```
@@ -40,6 +46,7 @@ If you find this project helpful, maybe you can buy me a coffee.
 支付宝(alipay):
 wish03@163.com
 
-微信号(weixin):
+微信支付(weixin):
+
 ![image](https://github.com/qq4917220/iview-template/blob/master/static/pic/weixin.jpg)
 
