@@ -2,20 +2,19 @@
 <html>
 
 <head>
-    <title>
-        {{ appname }}
-    </title>
+    <title>{{ appname }}</title>
     <meta charset="utf-8">
+    <link rel="shortcut icon" type="image/x-icon" href="//www.yingsheng.com/Content/images/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 </head>
 
-<body>
+<body style="height:100%;width:100%;">
     <div id="app"></div>
 </body>
 <script>
-    //var globalConfig = {{ globalConfig|raw }};
+    var globalConfig = {{globalConfig | raw}};
 </script>
-<script src="{{ baseUrl }}/js/vendor.min.js{{ unix }}"></script>
-<script src="{{ baseUrl }}/js/app.min.js{{ unix }}"></script>
+<script src="{{ subDir }}/js/vendor.min.js{{ unix }}"></script>
+<script src="{{ subDir }}/js/app.min.js{{ unix }}"></script>
 
 </html>

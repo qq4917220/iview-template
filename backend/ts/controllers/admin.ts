@@ -22,13 +22,38 @@ router.use('/login/verify', (req, res) => {
 
 //登录
 router.use('/login', (req, res) => {
-	//赋参数
+
 	let d = new Date()
-	let data = {
-		unix: '?' + Math.round(d.getTime() / 1000).toString(),
-		baseUrl: C.baseUrl
+	let subDir: string
+	subDir = (C.subDir) ? '/' + C.subDir : '';
+
+	let user: globalUserModel = {
+		id: '',
+		name: '',
+		role: ''
 	}
-	res.render('admin/login', data)
+
+	if (req.session!.user) {
+		user.id = req.session!.user.userid
+		user.name = req.session!.user.name
+		user.role = req.session!.user.role
+	}
+
+	let globalConfig: globalConfigStatic = {
+		appName: 'OA登录',
+		appVersion: C.version,
+		user: user,
+		prefixPath: subDir,
+		ip: req.ip
+	}
+
+	let obj = {
+		appname: globalConfig.appName,
+		unix: '?' + Math.round(d.getTime() / 1000).toString(),
+		subDir: globalConfig.prefixPath,
+		globalConfig: JSON.stringify(globalConfig)
+	}
+	res.render('admin/login', obj)
 })
 
 //退出登录
@@ -108,16 +133,37 @@ router.use('/', (req, res) => {
 		req.session!.user = loginUser;
 	}
 
-
-	//赋参数
 	let d = new Date()
-	let data = {
-		unix: '?' + Math.round(d.getTime() / 1000).toString(),
-		baseUrl: C.baseUrl,
-		loginUser: JSON.stringify(req.session!.user)
+	let subDir: string;
+	subDir = (C.subDir) ? '/' + C.subDir : '';
+
+	let user: globalUserModel = {
+		id: '',
+		name: '',
+		role: ''
 	}
 
-	res.render('admin/master', data)
+	if (req.session!.user) {
+		user.id = req.session!.user.userid
+		user.name = req.session!.user.name
+		user.role = req.session!.user.role
+	}
+
+	let globalConfig: globalConfigStatic = {
+		appName: 'OA管理后台',
+		appVersion: C.version,
+		user: user,
+		prefixPath: subDir,
+		ip: req.ip
+	}
+
+	let obj = {
+		appname: globalConfig.appName,
+		unix: '?' + Math.round(d.getTime() / 1000).toString(),
+		subDir: globalConfig.prefixPath,
+		globalConfig: JSON.stringify(globalConfig)
+	}
+	res.render('admin/master', obj)
 })
 
 

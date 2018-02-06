@@ -1,6 +1,6 @@
 <template>
   <div>
-    home
+    请选择菜单功能进行操作。
   </div>
 </template>
 
@@ -11,15 +11,11 @@ import VueRouter from "vue-router";
 import moment from "moment";
 import _ from "lodash";
 
-import session from "weex-session";
-
 @Component({
   components: {}
 })
 export default class test extends Vue {
-  mounted() {
-    // console.log("home");
-  }
+  mounted() {}
 }
 </script>
 

@@ -1,7 +1,15 @@
-declare module 'lodash'
 declare module 'swig'
 
-declare var C: any
+interface globalConfigStatic {
+    appName: string
+    appVersion: string
+    user: globalUserModel
+    ip: string
+    prefixPath: string
+}
 
-declare var baseUrl: any
-declare var loginUser: any
+interface globalUserModel {
+    id: string
+    name: string
+    role: string
+}

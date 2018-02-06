@@ -4,22 +4,10 @@ import * as bodyParser from 'body-parser'
 import * as session from 'express-session'
 import * as _ from 'lodash'
 import * as swig from 'swig'
+import './global'
 import * as router from './routes/router'
 
 const app = express()
-
-let gc = {
-    root: path.join(__dirname, '..', '..'),
-    baseUrl: '//localhost:8080',
-    port: 8080,
-    session: {
-        name: 'ADMINSESSION',
-        secret: 'SYS$SESSION*secret#100',
-        maxAge: 7000 * 60 * 1000 //过期时间：7000分钟
-    }
-}
-
-global['C'] = gc
 
 /**SESSION */
 app.use(session({
@@ -39,6 +27,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.set('views', path.join(C.root, 'backend', 'views'))
 app.engine('html', swig.renderFile)
 app.set('view engine', 'html')
+
 
 router.set(app)
 

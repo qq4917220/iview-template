@@ -1,189 +1,157 @@
 <template>
-  <!-- <router-view></router-view> -->
-  <div class="app-main" style="position:absolute;width:100%;height:100%;">
-    <Layout class="app-layout" style="height:100%;">
-      <Sider ref="side1" hide-trigger collapsible :collapsed-width="78" v-model="isCollapsed" style="overflow:auto">
-        <!--logo-->
-        <div class="logo-con">
-          <img v-show="!isCollapsed" src="/admin/images/logo.jpg" key="max-logo" @click="handleClickHome" />
-          <img v-show="isCollapsed" src="/admin/images/logo-min.jpg" key="min-logo" @click="handleClickHome" />
-        </div>
-        <!--菜单-->
-        <Menu theme="dark" width="auto" accordion :active-name="menuitemActiveName" :class="menuitemClasses" @on-select="handleClickMenuItem">
-          <div v-for="(item, index) in menuMenuItems" :key="index">
-            <!--单链接-->
-            <MenuItem :name="item.id" v-if="!item.children">
-            <Icon :type="item.icon?item.icon:'ios-navigate'"></Icon>
-            <span>{{item.title}}</span>
-            </MenuItem>
-            <!--带子菜单-->
-            <Submenu name="3" v-if="item.children">
-              <template slot="title">
-                <Icon :type=" item.icon?item.icon: 'folder' "></Icon>
-                <span>{{item.title}}</span>
-              </template>
-              <MenuItem :name="item2.id" v-for="(item2, index2) in item.children" :key="index2">
-              <Icon :type="item2.icon?item2.icon:'ios-navigate'"></Icon>{{item2.title}}</MenuItem>
-            </Submenu>
-          </div>
-        </Menu>
-      </Sider>
-      <Layout>
-        <Header :style="{padding: 0}" class="layout-header-bar">
+
+     <div class="main" :class="{'main-hide-text': shrink}">
+    <div class="sidebar-menu-con" :style="{width: shrink?'60px':'200px', overflow: shrink ? 'visible' : 'auto'}">
+      <!--logo-->
+      <div class="logo-con">
+        <img @click="home" :style="{cursor: 'pointer'}" v-show="!shrink" src="http://static.yingsheng.com/oa.yingsheng.com/images/logo.png" key="max-logo" />
+        <img @click="home" :style="{cursor: 'pointer'}" v-show="shrink" src="http://static.yingsheng.com/oa.yingsheng.com/images/logo-min.png" key="min-logo" />
+      </div>
+      <!--菜单-->
+      <master-menu :shrink="shrink" :menuList="menuList" :activateMenu="activateMenu" :activateMenuGroup="activateMenuGroup"></master-menu>
+    </div>
+    <div class="main-header-con" :style="{paddingLeft: shrink?'60px':'200px'}">
+      <div class="main-header">
+        <div class="navicon-con">
           <!--左侧缩进按钮-->
-          <div class="header-navicon">
-            <Icon @click.native="collapsedSider" :class="rotateIcon" :style="{margin: '20px 20px 0'}" type="navicon-round" size="24"></Icon>
+          <Icon :style="{transform: 'rotateZ(' + (this.shrink ? '-90' : '0') + 'deg)',margin:'18px',cursor:'pointer'}" @click.native="collapsedSider" type="navicon-round" size="20"></Icon>
+        </div>
+        <div class="header-middle-con">
+          <div class="main-breadcrumb">
+            <!--中间导航-->
+            <master-nav :currentPath="currentPath"></master-nav>
           </div>
-          <!--右侧登录-->
-          <div class="header-avator">
-            <div class="user-dropdown-menu-con">
-              <Row type="flex" justify="end" align="middle" class="user-dropdown-innercon">
-                <Dropdown transfer trigger="click" @on-click="handleClickUserDropdown">
-                  <a href="javascript:void(0)">
-                    <span class="main-user-name">{{masterUserName}}</span>
-                    <Icon type="arrow-down-b"></Icon>
-                  </a>
-                  <DropdownMenu slot="list">
-                    <DropdownItem name="userCenter" divided>个人中心</DropdownItem>
-                    <DropdownItem name="userPower" divided>权限设置</DropdownItem>
-                    <DropdownItem name="gotoHome" divided>返回首页</DropdownItem>
-                    <DropdownItem name="logout" divided>退出登录</DropdownItem>
-                  </DropdownMenu>
-                </Dropdown>
-                <Avatar icon="person" style="background: #619fe7;margin-left:10px;"></Avatar>
-              </Row>
-            </div>
+        </div>
+        <div class="header-avator-con">
+          <!-- <full-screen v-model="isFullScreen" @on-change="fullscreenChange"></full-screen>
+          <lock-screen></lock-screen>
+          <message-tip v-model="mesCount"></message-tip>
+          <theme-switch></theme-switch> -->
+
+          <div class="user-dropdown-menu-con">
+            <Row type="flex" justify="end" align="middle" class="user-dropdown-innercon">
+              <master-drop-menu></master-drop-menu>
+            </Row>
           </div>
-        </Header>
-        <Content style="height:100%;margin:20px;">
+        </div>
+      </div>
+      <div class="tags-con">
+        <master-page-opened :pageTagsList="pageTagsList"></master-page-opened>
+      </div>
+    </div>
+    <div class="single-page-con" :style="{left: shrink?'60px':'200px',height:'100%;'}">
+      <div class="single-page" style="height:100%;">
+        <keep-alive>
           <router-view></router-view>
-          <div v-html="loggerInfo">
-          </div>
-        </Content>
-      </Layout>
-    </Layout>
+        </keep-alive>
+      </div>
+    </div>
   </div>
+
 </template>
 
-<style scoped>
-@import url("./master.css");
+<style lang="less">
+@import './master.less';
 </style>
 
 <script lang="ts">
-import { Vue, Component, Watch } from "vue-property-decorator";
-import Axios, { AxiosRequestConfig } from "axios";
-import _ from "lodash";
+import { Vue, Component, Watch } from 'vue-property-decorator'
+import masterMenu from './components/master/menu.vue'
+import masterDropMenu from './components/master/dropMenu.vue'
+import masterNav from './components/master/nav.vue'
+import masterPageOpened from './components/master/pageOpened.vue'
+import menuService from '../../ts/service/menu'
 
-@Component
+@Component({
+    components: {
+        masterMenu: masterMenu,
+        masterDropMenu: masterDropMenu,
+        masterNav: masterNav,
+        masterPageOpened: masterPageOpened
+    }
+})
 export default class App extends Vue {
-  masterUserName = "";
-  isDebug = true;
-  loggerInfo = "";
-  isCollapsed = false;
-  menuitemClasses = ["menu-item", ""];
-  menuitemActiveName = "";
-  rotateIcon = ["menu-item", ""];
-  menuMenuItems: menuModel.menuListItem[] = [];
-
-  @Watch("isCollapsed")
-  isCollapsedFun() {
-    this.menuitemClasses = [
-      "menu-item",
-      this.isCollapsed == true ? "collapsed-menu" : ""
-    ];
-    this.rotateIcon = [
-      "menu-icon",
-      this.isCollapsed == true ? "rotate-icon" : ""
-    ];
-  }
-
-  mounted() {
-    this.masterUserName = loginUser.name;
-    this.initMenu();
-  }
-
-  //初始化菜单
-  async initMenu() {
-    let reqConfig: AxiosRequestConfig = {
-      method: "post",
-      url: baseUrl + "/admin/menu",
-      data: {},
-      headers: {
-        "Content-Type": "application/json"
-      }
-    };
-    let menuData = await Axios.request(reqConfig);
-    let data: menuModel.menuResult<menuModel.menuListItem> = menuData.data;
-
-    if (data.err) {
-      return;
-    }
-    this.menuMenuItems = data.data!.items;
-  }
-
-  //功能建设中
-  building(str: any) {
-    this.$Message.error({ content: str + "功能建设中" });
-  }
-
-  //返回首页
-  handleClickHome() {
-    this.menuitemActiveName = "";
-    this.$router.push({
-      name: "adminHome"
-    });
-  }
-
-  //切换左侧
-  collapsedSider() {
-    let obj: any = this;
-    obj.$refs.side1.toggleCollapse();
-  }
-
-  //用户下拉菜单点击
-  handleClickUserDropdown(name: any) {
-    switch (name) {
-      case "gotoHome":
-        this.handleClickHome();
-        break;
-      case "logout":
-        const url = baseUrl + "/admin/logout";
-        location.href = url;
-        break;
-      default:
-        this.building(name);
-        break;
-    }
-  }
-
-  //用户左侧菜单点击
-  handleClickMenuItem(id: string) {
-    this.menuitemActiveName = name;
-    // logger.add("用户左侧菜单：" + id);
-    let url = "";
-    _.each(this.menuMenuItems, (item: menuModel.menuListItem) => {
-      if (!item.children) {
-        if (item.id == Number(id)) {
-          url = item.url;
+    // //监视器
+    @Watch('$route')
+    routerFun() {
+        // console.log(this.$router.currentRoute);
+        if (this.$router.currentRoute.name == 'adminHome') {
+            localStorage['currentMenuID'] = '0'
+            this.$store.commit('setCurrentMenuID', '0')
+            this.$store.commit('setCurrentMenuTitle', '首页')
+            this.$store.commit('setCurrentMenuUrl', 'adminHome')
+            this.$store.commit('addPageOpened', '0')
+            let userID: string = globalConfig.user.id
+            if (userID != localStorage['currentUserID']) {
+                localStorage.clear()
+                localStorage['currentUserID'] = userID
+            }
         }
-      } else {
-        _.each(item.children, (item2: menuModel.menuListItem) => {
-          if (item2.id == Number(id)) {
-            url = item2.url;
-          }
-        });
-      }
-    });
-    console.log(url);
-    if (url.indexOf("http://") > -1 || url.indexOf("https://") > -1) {
-      this.$router.push({
-        name: "adminIframe",
-        params: { url: encodeURIComponent(url) }
-      });
-    } else {
-      let iUrl = baseUrl + "/" + encodeURIComponent(url);
-      this.$router.push(url);
     }
-  }
+
+    //是否缩进
+    shrink = false
+
+    //菜单列表
+    get menuList() {
+        return this.$store.state.menuList
+    }
+
+    //当前菜单组
+    get activateMenuGroup() {
+        return this.$store.getters.currentMenuGroup
+    }
+
+    //当前菜单项
+    get activateMenu() {
+        return Number(this.$store.state.currentMenuID)
+    }
+
+    //当前NAV面包屑
+    get currentPath() {
+        this.$store.commit('setCurrentPath', this.$store.state.currentMenuID) //生成NAV面包屑
+        return this.$store.state.currentPath
+    }
+
+    //标签页列表
+    get pageTagsList() {
+        return this.$store.state.pageOpened
+    }
+
+    created() {
+        this.$store.commit('setCurrentMenuID', '') //初始化当前菜单
+        this.$store.commit('setPageOpened', '') //初始化标签页
+        this.init()
+    }
+
+    async init() {
+        await this.initMenu()
+    }
+
+    //初始化菜单
+    async initMenu() {
+        let menuResult: ServiceResult<
+            ServiceList<menuModel.menuListItem>
+        > = await menuService.UserMenuList()
+        if (menuResult.err) {
+            // console.log(menuResult.err);
+            return []
+        }
+        this.$store.commit('setMenuList', menuResult.data!.items)
+    }
+
+    get rotateIcon() {
+        return ['menu-icon', this.shrink == true ? 'rotate-icon' : '']
+    }
+
+    //切换左侧
+    collapsedSider() {
+        this.shrink = this.shrink ? false : true
+    }
+
+    //返回首页
+    home() {
+        this.$router.push({ name: 'adminHome' })
+    }
 }
 </script>

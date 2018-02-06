@@ -1,61 +1,80 @@
 <template>
+
   <div class="login" @keydown.enter="handleSubmit">
-    <div class="login-con">
-      <Card :bordered="false">
-        <p slot="title">
-          <Icon type="log-in"></Icon>
-          欢迎登录
-        </p>
+    <div class="main_box">
+      <div class="login-con">
 
-        <div class="form-con">
+        <Card :bordered="false">
+          <p slot="title">
+            <Icon type="log-in"></Icon>
+            欢迎登录
+          </p>
 
-          <Form ref="loginForm" :model="form" :rules="rules">
-            <FormItem prop="phone">
-              <Input v-model="form.phone" placeholder="请输入手机号">
-              <span slot="prepend">
-                <Icon :size="16" type="person"></Icon>
-              </span>
-              </Input>
-            </FormItem>
-            <FormItem prop="code">
-              <Input v-model="form.code" placeholder="请输入验证码">
-              <span slot="prepend">
-                <Icon :size="14" type="locked"></Icon>
-              </span>
-              </Input>
-            </FormItem>
-            <FormItem style="text-align:center;">
-              <Button @click="handleSubmit" type="primary">登　录</Button>
-              &nbsp;
-              <Button @click="handleGetCode" type="primary">验证码</Button>
-              &nbsp;
-              <Button @click="handleDingding" type="info">钉　钉</Button>
-            </FormItem>
-          </Form>
-          <p class="login-tip">使用手机号登录请先获取验证码</p>
-        </div>
-      </Card>
+          <div class="form-con">
+
+            <Form ref="loginForm" :model="form" :rules="rules">
+              <FormItem prop="phone">
+                <Input v-model="form.phone" placeholder="请输入手机号">
+                <span slot="prepend">
+                  <Icon :size="16" type="person"></Icon>
+                </span>
+                </Input>
+              </FormItem>
+              <FormItem prop="code">
+                <Input v-model="form.code" placeholder="请输入验证码">
+                <span slot="prepend">
+                  <Icon :size="14" type="locked"></Icon>
+                </span>
+                </Input>
+              </FormItem>
+              <FormItem style="text-align:center;">
+                <Button @click="handleSubmit" type="primary">登　录</Button>
+                &nbsp;
+                <Button @click="handleGetCode" type="primary">验证码</Button>
+                &nbsp;
+                <Button @click="handleDingding" type="info">钉　钉</Button>
+              </FormItem>
+            </Form>
+            <p class="login-tip">使用手机号登录请先获取验证码</p>
+          </div>
+        </Card>
+
+      </div>
+
+      <img class="login_img" src="http://static.yingsheng.com/oa.yingsheng.com/images/login_img.png" />
     </div>
   </div>
 </template>
 
 <style scoped>
-@import url("/admin/css/global.css");
+.main_box {
+  width: 1200px;
+  margin: 0 auto;
+  position: relative;
+}
+.login_img {
+  position: absolute;
+  right: 243px;
+  top: 0;
+  z-index: 99;
+}
 .login {
   width: 100%;
   height: 100%;
-  background-image: url("/admin/images/login_bg.jpg");
-  background-size: cover;
-  background-position: center;
+  background-image: url("http://static.yingsheng.com/oa.yingsheng.com/images/login_bg.jpg");
+  background-size: 100% auto;
+  background-position: top;
+  background-repeat: no-repeat;
   position: relative;
 }
 .login-con {
   position: absolute;
-  right: 160px;
-  top: 50%;
-  -webkit-transform: translateY(-60%);
-  transform: translateY(-60%);
+  right: 128px;
+  top: 256px;
+  /* -webkit-transform: translateY(-60%);
+  transform: translateY(-60%); */
   width: 300px;
+  z-index: 9;
 }
 .login-con-header {
   font-size: 16px;
@@ -79,9 +98,10 @@ import Axios from "axios";
 
 @Component
 export default class App extends Vue {
+  baseUrl = globalConfig.prefixPath;
   form = {
-    phone: "13286408883",
-    code: "1234"
+    phone: "",
+    code: ""
   };
   phoneRegx = new RegExp(/^\d{11}$/);
   rules = {
@@ -116,9 +136,9 @@ export default class App extends Vue {
       phone: this.form.phone,
       code: this.form.code
     });
-    if (!data!.data.status) {
+    if (!data.data.status) {
       this.$Message.error({
-        content: this.form.phone + "登录失败！" + data.data.err
+        content: this.form.phone + "登录失败！" + data.data.msg
       });
       return;
     }
@@ -126,21 +146,28 @@ export default class App extends Vue {
       content: this.form.phone + "登录成功！正在跳转到管理页面..."
     });
     setTimeout(function() {
-      location.href = baseUrl + "/admin/home";
+      location.href = globalConfig.prefixPath + "/";
     }, 2000);
   }
 
   //获取验证码
-  handleGetCode() {
-    this.$Message.error({
-      content: "功能建设中.."
+  async handleGetCode() {
+    let data = await Axios.post("./login/getcode", {
+      phone: this.form.phone
+    });
+    if (!data.data.status) {
+      this.$Message.error({
+        content: this.form.phone + "获取验证码失败！" + data.data.msg
+      });
+      return;
+    }
+    this.$Message.success({
+      content: data.data.msg
     });
   }
 
   handleDingding() {
-    this.$Message.error({
-      content: "功能建设中.."
-    });
+    location.href = globalConfig.prefixPath + "/webapp/admin/login/dingding";
   }
 }
 </script>
