@@ -4,7 +4,7 @@ import _ from 'lodash'
 
 Vue.use(Vuex);
 
-let currentHome = {
+const currentHome = {
     id: 0,
     icon: "home",
     title: "首页",
@@ -12,14 +12,18 @@ let currentHome = {
     status: true
 }
 
+const menuInit: menuModel.menuListItem[] = []
+const cacheInit: string[] = []
+
 const store = new Vuex.Store({
     state: {
-        menuList: [],   //菜单
+        menuList: menuInit,   //菜单
         currentMenuID: "",  //当前菜单ID
         currentMenuTitle: "", //当前菜单标题
         currentMenuUrl: "",//当前菜单链接
-        currentPath: [], //当前路径
-        pageOpened: [] //打开的页面
+        currentPath: menuInit, //当前路径
+        pageOpened: menuInit, //打开的标签
+        cachePages: cacheInit //缓存的页面
     },
     mutations: {
         setMenuList(state, menuList) {
@@ -44,7 +48,7 @@ const store = new Vuex.Store({
                 return;
             }
             let menuList: menuModel.menuListItem[] = state.menuList;
-            let currentPath: any = [];
+            let currentPath: menuModel.menuListItem[] = [];
             let currentHomeUrl = {
                 id: 0,
                 icon: "home",
@@ -84,9 +88,9 @@ const store = new Vuex.Store({
                 return;
             }
             let menuList: menuModel.menuListItem[] = state.menuList;
-            let pageOpened: any = state.pageOpened;
+            let pageOpened: menuModel.menuListItem[] = state.pageOpened;
             if (menuID == "0") {
-                let f = _.findIndex(pageOpened, (s: any) => {
+                let f = _.findIndex(pageOpened, (s: menuModel.menuListItem) => {
                     return (s.id == 0)
                 })
                 if (f == -1) {
@@ -96,7 +100,7 @@ const store = new Vuex.Store({
                 _.each(menuList, (item) => {
                     if (!item.children) {
                         if (item.id == Number(menuID)) {
-                            let f = _.findIndex(pageOpened, (s: any) => {
+                            let f = _.findIndex(pageOpened, (s: menuModel.menuListItem) => {
                                 return (s.id == Number(menuID))
                             })
                             if (f == -1) {
@@ -106,7 +110,7 @@ const store = new Vuex.Store({
                     } else {
                         _.each(item.children, (item2: menuModel.menuListItem) => {
                             if (item2.id == Number(menuID)) {
-                                let f = _.findIndex(pageOpened, (s: any) => {
+                                let f = _.findIndex(pageOpened, (s: menuModel.menuListItem) => {
                                     return (s.id == Number(menuID))
                                 })
                                 if (f == -1) {
@@ -130,19 +134,55 @@ const store = new Vuex.Store({
         },
         clearAllPageOpened(state, currentItem?) {
             state.pageOpened = []
-            let arr: any = [];
+            let arr: menuModel.menuListItem[] = [];
             arr.push(currentHome)
             if (currentItem) {
                 arr.push(currentItem)
             }
             state.pageOpened = arr;
+        },
+        // setCachePages(state) {
+        //     if (state.cachePages.length == 0 && localStorage["cachePages"]) {
+        //         state.cachePages = JSON.parse(localStorage["cachePages"])
+        //     }
+        // },
+        addCachePages(state, str) {
+            if (str == "") {
+                return;
+            }
+            let items = state.cachePages;
+
+            let f = _.findIndex(items, (item: string) => {
+                return (item == str)
+            })
+            if (f == -1) {
+                items.push(str)
+            }
+            state.cachePages = items;
+            localStorage["cachePages"] = JSON.stringify(state.cachePages);
+        },
+        // removeCachePages(state, str) {
+        //     state.cachePages.map((item: string, index: number) => {
+        //         if (item === str) {
+        //             state.cachePages.splice(index, 1);
+        //         }
+        //     });
+        //     localStorage["cachePages"] = JSON.stringify(state.cachePages);
+        // },
+        clearAllCachePages(state, currentItem?) {
+            state.cachePages = []
+            let arr: string[] = [];
+            if (currentItem) {
+                arr.push(currentItem)
+            }
+            state.cachePages = arr;
         }
     },
     getters: {
         currentMenuGroup(state) {
             if (state.currentPath.length > 2) {
                 let arr = []
-                arr.push(state.currentPath[1]["id"])
+                arr.push(state.currentPath[1].id)
                 return arr
             } else {
                 return []
@@ -176,8 +216,6 @@ const store = new Vuex.Store({
                 params: { url: iUrl }
             }
         }
-    },
-    modules: {
     }
 });
 

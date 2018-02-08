@@ -19,11 +19,8 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator'
-import Axios, { AxiosRequestConfig } from 'axios'
+import { Vue, Component } from 'vue-property-decorator'
 import VueRouter from 'vue-router'
-// import moment from "moment";
-// import _ from "lodash";
 
 @Component({
     components: {}

@@ -10,7 +10,8 @@ declare namespace menuModel {
         CreateBy: string,
         CreateDate: Date,
         UpDateBy: string,
-        UpDateDate: Date
+        UpDateDate: Date,
+        DeleteFlag: number
     }
     interface userMenuInfo {
         UserId: string,
@@ -33,13 +34,6 @@ declare namespace menuModel {
         CreateDate: Date,
         UpDateBy: string,
         UpDateDate: Date
-    }
-
-    interface menuResult<T> {
-        err?: any
-        data?: {
-            items: T[]
-        }
     }
 
     interface menuListItem {
