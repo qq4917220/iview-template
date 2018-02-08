@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 
+import iView from 'iview';
+
 import adminHome from '../vue/admin/home.vue'
 import adminIframe from '../vue/admin/iframe.vue'
 
@@ -17,3 +19,13 @@ const Router = new VueRouter({
 })
 
 export default Router
+
+Router.beforeEach((to, from, next) => {
+    iView.LoadingBar.start();
+    next();
+});
+
+Router.afterEach((to) => {
+    iView.LoadingBar.finish();
+    // window.scrollTo(0, 0);
+});
