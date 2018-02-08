@@ -1,52 +1,52 @@
 <template>
 
-     <div class="main" :class="{'main-hide-text': shrink}">
-    <div class="sidebar-menu-con" :style="{width: shrink?'60px':'200px', overflow: shrink ? 'visible' : 'auto'}">
-      <!--logo-->
-      <div class="logo-con">
-        <img @click="home" :style="{cursor: 'pointer'}" v-show="!shrink" src="http://static.yingsheng.com/oa.yingsheng.com/images/logo.png" key="max-logo" />
-        <img @click="home" :style="{cursor: 'pointer'}" v-show="shrink" src="http://static.yingsheng.com/oa.yingsheng.com/images/logo-min.png" key="min-logo" />
-      </div>
-      <!--菜单-->
-      <master-menu :shrink="shrink" :menuList="menuList" :activateMenu="activateMenu" :activateMenuGroup="activateMenuGroup"></master-menu>
-    </div>
-    <div class="main-header-con" :style="{paddingLeft: shrink?'60px':'200px'}">
-      <div class="main-header">
-        <div class="navicon-con">
-          <!--左侧缩进按钮-->
-          <Icon :style="{transform: 'rotateZ(' + (this.shrink ? '-90' : '0') + 'deg)',margin:'18px',cursor:'pointer'}" @click.native="collapsedSider" type="navicon-round" size="20"></Icon>
+    <div class="main" :class="{'main-hide-text': shrink}">
+        <div class="sidebar-menu-con" :style="{width: shrink?'60px':'200px', overflow: shrink ? 'visible' : 'auto'}">
+            <!--logo-->
+            <div class="logo-con">
+                <img @click="home" :style="{cursor: 'pointer'}" v-show="!shrink" src="/admin/images/logo.jpg" key="max-logo" />
+                <img @click="home" :style="{cursor: 'pointer'}" v-show="shrink" src="/admin/images/logo-min.jpg" key="min-logo" />
+            </div>
+            <!--菜单-->
+            <master-menu :shrink="shrink" :menuList="menuList" :activateMenu="activateMenu" :activateMenuGroup="activateMenuGroup"></master-menu>
         </div>
-        <div class="header-middle-con">
-          <div class="main-breadcrumb">
-            <!--中间导航-->
-            <master-nav :currentPath="currentPath"></master-nav>
-          </div>
-        </div>
-        <div class="header-avator-con">
-          <!-- <full-screen v-model="isFullScreen" @on-change="fullscreenChange"></full-screen>
+        <div class="main-header-con" :style="{paddingLeft: shrink?'60px':'200px'}">
+            <div class="main-header">
+                <div class="navicon-con">
+                    <!--左侧缩进按钮-->
+                    <Icon :style="{transform: 'rotateZ(' + (this.shrink ? '-90' : '0') + 'deg)',margin:'18px',cursor:'pointer'}" @click.native="collapsedSider" type="navicon-round" size="20"></Icon>
+                </div>
+                <div class="header-middle-con">
+                    <div class="main-breadcrumb">
+                        <!--中间导航-->
+                        <master-nav :currentPath="currentPath"></master-nav>
+                    </div>
+                </div>
+                <div class="header-avator-con">
+                    <!-- <full-screen v-model="isFullScreen" @on-change="fullscreenChange"></full-screen>
           <lock-screen></lock-screen>
           <message-tip v-model="mesCount"></message-tip>
           <theme-switch></theme-switch> -->
 
-          <div class="user-dropdown-menu-con">
-            <Row type="flex" justify="end" align="middle" class="user-dropdown-innercon">
-              <master-drop-menu></master-drop-menu>
-            </Row>
-          </div>
+                    <div class="user-dropdown-menu-con">
+                        <Row type="flex" justify="end" align="middle" class="user-dropdown-innercon">
+                            <master-drop-menu></master-drop-menu>
+                        </Row>
+                    </div>
+                </div>
+            </div>
+            <div class="tags-con">
+                <master-page-opened :pageTagsList="pageTagsList"></master-page-opened>
+            </div>
         </div>
-      </div>
-      <div class="tags-con">
-        <master-page-opened :pageTagsList="pageTagsList"></master-page-opened>
-      </div>
+        <div class="single-page-con" :style="{left: shrink?'60px':'200px',height:'100%;'}">
+            <div class="single-page" style="height:100%;">
+                <keep-alive>
+                    <router-view></router-view>
+                </keep-alive>
+            </div>
+        </div>
     </div>
-    <div class="single-page-con" :style="{left: shrink?'60px':'200px',height:'100%;'}">
-      <div class="single-page" style="height:100%;">
-        <keep-alive>
-          <router-view></router-view>
-        </keep-alive>
-      </div>
-    </div>
-  </div>
 
 </template>
 

@@ -11,7 +11,7 @@ module.exports = merge(webpackBaseConfig, {
         }),
         new webpack.optimize.CommonsChunkPlugin({
             name: 'vendor',
-            chunks: ['app'],
+            chunks: ['app', "adminLogin", "adminMaster"],
             minChunks: Infinity
         }),
         new webpack.optimize.UglifyJsPlugin({
